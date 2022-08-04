@@ -1,2 +1,3 @@
-# lyrics-nlp-acoustic-predictions
-Based on the lyrics of a song, can the following values of audio features be predicted?: - Acoustic, Danceable, Energetic, Instrumental, Lively, Popularity, Speechful, Valence
+# Welcome
+Given a fixed genre, can the following 6 values be predicted by the song's lyrics and release year?:
+- Acousticness, Danceability, Energy, Instrimentalness, Liveness, Valence, Speechiness
