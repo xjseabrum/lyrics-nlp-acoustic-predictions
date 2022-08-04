@@ -1,10 +1,17 @@
 # For this to work on a local machine, 
-# be sure to set environment variables
-# SPOTIPY_CLIENT_ID and SPOTIPY_CLIENT_SECRET
-# in the terminal
+# be sure to set environment variables in the terminal 
+# before opening python:
 
-# This information can be found in your Spotify developer account dashboard
-# application
+# Windows:
+# $env:SPOTIPY_CLIENT_ID="your_client_id"
+# $env:SPOTIPY_CLIENT_SECRET="your_client_secret"
+
+# Mac:
+# export SPOTIPY_CLIENT_ID=your_client_id
+# export SPOTIPY_CLIENT_SECRET=your_client_secret
+
+# The client and secret id information can be found in your 
+# Spotify developer account dashboard application
 # https://developer.spotify.com/dashboard/applications
 
 # Spotify API documentation for structuring queries
@@ -50,7 +57,7 @@ def gather_track_uris(start_year:int = 2018,
             result = sp.search(QUERY, type = TYPE, limit = 1, offset = offset)
             # The URI in the JSON file is delimited by colons.
             track_uris.append(result['tracks']['items'][0]['uri'].split(":")[2])   
-
+            
     return track_uris
 
 uris = gather_track_uris()
