@@ -31,7 +31,8 @@ def gather_track_uris(start_year:int = 2018,
                       end_year:int = 2022, 
                       genre:str = "r&b",
                       type:str = "album,track",
-                      n_tracks:int = 200) -> list:
+                      n_tracks:int = 200, 
+                      progress_refresh:int = 10) -> list:
     track_uris = []
     year_range = [*range(start_year, end_year + 1)]
     YEARS = [str(x) for x in year_range]
@@ -39,7 +40,7 @@ def gather_track_uris(start_year:int = 2018,
     TYPE = type
     AND = " AND "
 
-    # We will get the top n_tracks of results for each year
+    # This gets the top n_tracks of results for each year
     for year in YEARS:
         print("\n\nProcessing year: " + year + " for genre: " + GENRE)
         QUERY = "year:" + "\"" + year + "\"" + AND + \
@@ -48,7 +49,7 @@ def gather_track_uris(start_year:int = 2018,
         # Get the top n_tracks of results in the query
         for offset in range(0, n_tracks):
             # Progress meters
-            if (offset + 1) % 5 == 0:
+            if (offset + 1) % progress_refresh == 0:
                 print("Processing track #" + str(offset + 1) + " of " + str(n_tracks))
             elif (offset + 1) % n_tracks == 0:
                 print("Processing track #" + str(offset + 1) + " of " + str(n_tracks))
@@ -57,7 +58,7 @@ def gather_track_uris(start_year:int = 2018,
             result = sp.search(QUERY, type = TYPE, limit = 1, offset = offset)
             # The URI in the JSON file is delimited by colons.
             track_uris.append(result['tracks']['items'][0]['uri'].split(":")[2])   
-            
+
     return track_uris
 
 uris = gather_track_uris()
