@@ -28,13 +28,30 @@ from spotipy.oauth2 import SpotifyClientCredentials
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
 def gather_track_uris(start_year:int, end_year:int, n_tracks:int,
-                      genre:str = "r&b", type:str = "album,track", 
-                      progress_refresh:int = 1) -> list:
+                      genre:str = "r&b", type:str = "album,track") -> list:
+    """A function to gather track uris from a given year range, genre, and number of tracks per year.
+
+    Args:
+        start_year (int): The start year of the range.
+        end_year (int): The end year of the range, inclusive.
+        n_tracks (int): The number of tracks to search for per year. Should be less than 300. If not, will set to 300.
+        genre (str): The genre to search for.  Defaults to "r&b". Call spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials()).recommendation_genre_seeds() for the full list. 
+        type (str): _description_. Defaults to "album,track". The available filters are: "album, artist, track, year, upc, tag:hipster, tag:new, isrc, genre". See the documentation for further details: https://developer.spotify.com/documentation/web-api/reference/#/operations/search
+
+    Returns:
+        list: The list of Spotify track uris.
+    """               
     track_uris = []
     year_range = [*range(start_year, end_year + 1)]
     YEARS = [str(x) for x in year_range]
     GENRE = genre
     TYPE = type
+
+    # Interestingly, the API doesn't (seem to) allow for more than 300
+    # results per query.  Setting the n_track limit to 300.
+    if n_tracks > 300:
+        print("Setting n_tracks to 300, as the API (seemingly) only allows for 300 results per query.")
+        n_tracks = 300
 
     # This gets the top n_tracks of results for each year
     for year in YEARS:
@@ -87,4 +104,7 @@ def gather_track_uris(start_year:int, end_year:int, n_tracks:int,
 
     return track_uris
 
-uris = gather_track_uris(start_year = 2012, end_year = 2022, n_tracks = 300)
+uris = gather_track_uris(start_year = 2013, end_year = 2022, n_tracks = 300)
+
+def get_song_data_from_uri(uri_list:list):
+    pass
