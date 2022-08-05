@@ -27,12 +27,9 @@ from spotipy.oauth2 import SpotifyClientCredentials
 
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
-def gather_track_uris(start_year:int = 2018, 
-                      end_year:int = 2022, 
-                      genre:str = "r&b",
-                      type:str = "album,track",
-                      n_tracks:int = 200, 
-                      progress_refresh:int = 10) -> list:
+def gather_track_uris(start_year:int, end_year:int, n_tracks:int,
+                      genre:str = "r&b", type:str = "album,track", 
+                      progress_refresh:int = 1) -> list:
     track_uris = []
     year_range = [*range(start_year, end_year + 1)]
     YEARS = [str(x) for x in year_range]
@@ -43,20 +40,51 @@ def gather_track_uris(start_year:int = 2018,
     for year in YEARS:
         print(f"\nProcessing year: {year} for genre: {GENRE}")
         QUERY = f"year:{year} AND genre:{GENRE}"
+        
+        # The max value accepted by the limit keyword is 50 for spotify's API. 
+        # So, we can process in batches of 50 to append to the URI list quicker.
+        multiple_of_50 = n_tracks // 50
 
-        # Get the top n_tracks of results in the query
-        for offset in range(0, n_tracks):
-            # Progress meters
-            if (offset + 1) % progress_refresh == 0:
-                print(f"Processing track #{offset + 1} of {n_tracks}")
-            elif (offset + 1) % n_tracks == 0:
-                print(f"Processing track #{offset+ + 1} of {n_tracks}")
-            # There's likely a better way to do this than one by one.
-            # Currently, just satisfied that the API calls work as intended.
-            result = sp.search(QUERY, type = TYPE, limit = 1, offset = offset)
+        # The following is for if we have, ie, 251 tracks, we want to process
+        # the next "batch" of 50 tracks.
+        if n_tracks % 50 != 0:
+            multiple_of_50 += 1
+
+        for offset in range(0, multiple_of_50):
+            # For processing less than 50 tracks:
+            if n_tracks < 50:
+                print(f"Processing tracks {offset*50 + 1}-{n_tracks} of {n_tracks}")
+                result = sp.search(QUERY, type = TYPE, limit = n_tracks, 
+                                   offset = 0)
+                uri_batch = [result['tracks']['items'][x]['uri'].split(":")[2] 
+                         for x in range(0, n_tracks)] 
+                track_uris += uri_batch
+                return track_uris
+            
+            # If processing the, i.e., 251st track, or some leftover amount that
+            # isn't a multiple of 50
+            if ((offset + 1)*50) > n_tracks:
+                print(f"Processing tracks {offset*50 + 1}-{n_tracks} of {n_tracks}")
+                # Offset and limit are adjusted to account for 
+                # tracks in a non-full batch of 50.
+                result = sp.search(QUERY, type = TYPE, limit = (n_tracks % 50), 
+                               offset = (offset*50 - (50 - (n_tracks % 50))))
+                uri_batch = [result['tracks']['items'][x]['uri'].split(":")[2] 
+                         for x in range(0, (n_tracks % 50))]
+                track_uris += uri_batch
+                return track_uris                               
+
+            print(f"Processing tracks {offset*50 + 1}-{(offset + 1)*50} of {n_tracks}")
+            result = sp.search(QUERY, type = TYPE, limit = 50, 
+                                   offset = (offset*50))
+            
             # The URI in the JSON file is delimited by colons.
-            track_uris.append(result['tracks']['items'][0]['uri'].split(":")[2])   
+            uri_batch = [result['tracks']['items'][x]['uri'].split(":")[2] 
+                         for x in range(0, 50)]                            
+            
+            # Concatenate the list to have a flat list of URIs.
+            track_uris += uri_batch  
 
     return track_uris
 
-uris = gather_track_uris()
+uris = gather_track_uris(start_year = 2012, end_year = 2022, n_tracks = 300)
