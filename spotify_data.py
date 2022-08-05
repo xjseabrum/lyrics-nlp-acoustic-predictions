@@ -36,7 +36,7 @@ def gather_track_uris(start_year:int, end_year:int, n_tracks:int,
         end_year (int): The end year of the range, inclusive.
         n_tracks (int): The number of tracks to search for per year. Should be less than 300. If not, will set to 300.
         genre (str): The genre to search for.  Defaults to "r&b". Call spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials()).recommendation_genre_seeds() for the full list. 
-        type (str): _description_. Defaults to "album,track". The available filters are: "album, artist, track, year, upc, tag:hipster, tag:new, isrc, genre". See the documentation for further details: https://developer.spotify.com/documentation/web-api/reference/#/operations/search
+        type (str): Defaults to "album,track". According to SpotiPy documentation, this is the "types of items to return". The available filters are: "album, artist, track, year, upc, tag:hipster, tag:new, isrc, genre". See the documentation for further details: https://developer.spotify.com/documentation/web-api/reference/#/operations/search
 
     Returns:
         list: The list of Spotify track uris.
@@ -106,5 +106,55 @@ def gather_track_uris(start_year:int, end_year:int, n_tracks:int,
 
 uris = gather_track_uris(start_year = 2013, end_year = 2022, n_tracks = 300)
 
-def get_song_data_from_uri(uri_list:list):
-    pass
+# pickling the uri list
+# import pickle
+# with open('uris.pickle', 'wb') as handle:
+#     pickle.dump(uris, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+def get_song_features_from_uri(track_uris:list):
+    features_of_interest = {'acousticness', 'danceability', 'energy', 
+            'instrumentalness', 'liveness', 'valence', 'speechiness', 'tempo', 
+            'duration_ms', 'mode'}
+    song_features = []
+    uri_idx = 0
+    for uri in track_uris:
+        print(f"Processing URI #{uri_idx + 1} of {len(track_uris)} URIs")
+        audio_features = sp.audio_features(uri)[0]
+        result = {key: audio_features[key] for key in features_of_interest}
+        song_features.append(result)
+        uri_idx += 1
+    return song_features
+
+features = get_song_features_from_uri(uris)
+
+# Pickling the features
+# with open('features.pickle', 'wb') as handle:
+#     pickle.dump(features, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+
+# The following function is very slow (~30 min), but it works as intended
+# There's very likely a way to do this better.
+def get_metadata_info(track_uris:list):
+    metadata = []
+    uri_idx = 0
+    for uri in track_uris:
+        print(f"Processing URI #{uri_idx + 1} of {len(track_uris)} URIs")
+        track = sp.track(uri)
+        track_meta = {}
+
+        track_meta["song_name"] = track["name"]
+        track_meta["n_artists"] = len(track["artists"])
+        track_meta["main_artist"] = track["artists"][0]["name"]
+        track_meta["main_artist_id"] = track["artists"][0]["id"]
+        track_meta["main_artist_genres"] = sp.artist(track_meta["main_artist_id"])["genres"]
+        track_meta["release_date"] = track["album"]["release_date"]
+        track_meta["explicit"] = 1 if track["explicit"] else 0
+        metadata.append(track_meta)
+        uri_idx += 1
+    return metadata
+
+# Pickling the metadata
+metadata = get_metadata_info(uris)
+with open("metadata.pickle", "wb") as handle:
+    pickle.dump(metadata, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
