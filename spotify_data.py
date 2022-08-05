@@ -38,21 +38,19 @@ def gather_track_uris(start_year:int = 2018,
     YEARS = [str(x) for x in year_range]
     GENRE = genre
     TYPE = type
-    AND = " AND "
 
     # This gets the top n_tracks of results for each year
     for year in YEARS:
-        print("\n\nProcessing year: " + year + " for genre: " + GENRE)
-        QUERY = "year:" + "\"" + year + "\"" + AND + \
-                "genre:"+ "\"" + GENRE + "\""
+        print(f"\nProcessing year: {year} for genre: {GENRE}")
+        QUERY = f"year:{year} AND genre:{GENRE}"
 
         # Get the top n_tracks of results in the query
         for offset in range(0, n_tracks):
             # Progress meters
             if (offset + 1) % progress_refresh == 0:
-                print("Processing track #" + str(offset + 1) + " of " + str(n_tracks))
+                print(f"Processing track #{offset + 1} of {n_tracks}")
             elif (offset + 1) % n_tracks == 0:
-                print("Processing track #" + str(offset + 1) + " of " + str(n_tracks))
+                print(f"Processing track #{offset+ + 1} of {n_tracks}")
             # There's likely a better way to do this than one by one.
             # Currently, just satisfied that the API calls work as intended.
             result = sp.search(QUERY, type = TYPE, limit = 1, offset = offset)
