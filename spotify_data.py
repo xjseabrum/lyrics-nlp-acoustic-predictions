@@ -24,6 +24,7 @@
 
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
+import pandas as pd
 
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
@@ -101,44 +102,24 @@ def gather_track_uris(start_year:int, end_year:int, n_tracks:int,
             
             # Concatenate the list to have a flat list of URIs.
             track_uris += uri_batch  
-
     return track_uris
-
-uris = gather_track_uris(start_year = 2013, end_year = 2022, n_tracks = 300)
-
-# pickling the uri list
-# import pickle
-# with open('uris.pickle', 'wb') as handle:
-#     pickle.dump(uris, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 def get_song_features_from_uri(track_uris:list):
     features_of_interest = {'acousticness', 'danceability', 'energy', 
             'instrumentalness', 'liveness', 'valence', 'speechiness', 'tempo', 
             'duration_ms', 'mode'}
     song_features = []
-    uri_idx = 0
+
     for uri in track_uris:
-        print(f"Processing URI #{uri_idx + 1} of {len(track_uris)} URIs")
         audio_features = sp.audio_features(uri)[0]
         result = {key: audio_features[key] for key in features_of_interest}
         song_features.append(result)
-        uri_idx += 1
     return song_features
 
-features = get_song_features_from_uri(uris)
-
-# Pickling the features
-# with open('features.pickle', 'wb') as handle:
-#     pickle.dump(features, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-
-# The following function is very slow (~30 min), but it works as intended
-# There's very likely a way to do this better.
 def get_metadata_info(track_uris:list):
     metadata = []
-    uri_idx = 0
+    # The following loop takes about 12 sec per 100 tracks on this machine.
     for uri in track_uris:
-        print(f"Processing URI #{uri_idx + 1} of {len(track_uris)} URIs")
         track = sp.track(uri)
         track_meta = {}
 
@@ -150,11 +131,23 @@ def get_metadata_info(track_uris:list):
         track_meta["release_date"] = track["album"]["release_date"]
         track_meta["explicit"] = 1 if track["explicit"] else 0
         metadata.append(track_meta)
-        uri_idx += 1
     return metadata
 
-# Pickling the metadata
-metadata = get_metadata_info(uris)
-with open("metadata.pickle", "wb") as handle:
-    pickle.dump(metadata, handle, protocol=pickle.HIGHEST_PROTOCOL)
+def construct_pandas_dataframe(track_uris:list, 
+                               features:dict, metadata:dict):   
+    data_list = []
+    for item in range(len(features)):
+        track_dict = {"track_id": track_uris[item]}
+        combined_dict = {**track_dict, **metadata[item], **features[item]}
+        data_list.append(combined_dict)
+    
+    data_frame = pd.DataFrame.from_dict(data_list)
+    return data_frame
 
+# The following is also part of main.py.
+uris = gather_track_uris(start_year = 2013, end_year = 2022, n_tracks = 300)
+features = get_song_features_from_uri(uris)
+metadata = get_metadata_info(uris)
+data = construct_pandas_dataframe(uris, features, metadata)
+data.to_csv("song_data.csv", index = False)
+data_read = pd.read_csv("song_data.csv")
