@@ -138,6 +138,10 @@ def get_metadata_info(track_uris:list):
 
 def construct_pandas_dataframe(track_uris:list, 
                                features:dict, metadata:dict):   
+    
+    # Ensure that the three lists/dicts are the same length
+    assert ((len(track_uris) == len(features)) and (len(features) == len(metadata))), "The lengths of the track_uris, features, and metadata lists are not equal."
+
     data_list = []
     for item in range(len(features)):
         track_dict = {"track_id": track_uris[item]}
