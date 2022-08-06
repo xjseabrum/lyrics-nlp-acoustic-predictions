@@ -10,6 +10,9 @@
 # export SPOTIPY_CLIENT_ID=your_client_id
 # export SPOTIPY_CLIENT_SECRET=your_client_secret
 
+# Or, you can save them in Anaconda (i think?)
+# https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#saving-environment-variables
+
 # The client and secret id information can be found in your 
 # Spotify developer account dashboard application
 # https://developer.spotify.com/dashboard/applications
@@ -36,7 +39,7 @@ def gather_track_uris(start_year:int, end_year:int, n_tracks:int,
         start_year (int): The start year of the range.
         end_year (int): The end year of the range, inclusive.
         n_tracks (int): The number of tracks to search for per year. Should be less than 300. If not, will set to 300.
-        genre (str): The genre to search for.  Defaults to "r&b". Call spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials()).recommendation_genre_seeds() for the full list. 
+        genre (str): The genre to search for.  Defaults to "r&b". Call spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials()).recommendation_genre_seeds() for the full list.
         type (str): Defaults to "album,track". According to SpotiPy documentation, this is the "types of items to return". The available filters are: "album, artist, track, year, upc, tag:hipster, tag:new, isrc, genre". See the documentation for further details: https://developer.spotify.com/documentation/web-api/reference/#/operations/search
 
     Returns:
