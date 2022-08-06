@@ -1,12 +1,4 @@
-def import_and_setup():
-    from lyricsgenius import Genius
-    import spotipy
-    from spotipy.oauth2 import SpotifyClientCredentials
-    import pandas as pd
-
-    sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
-    genius = Genius()
-
+# Setup for running the program in main.
 
 def create_or_load_data():
     from os.path import exists

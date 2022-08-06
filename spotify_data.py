@@ -152,9 +152,9 @@ def construct_pandas_dataframe(track_uris:list,
     return data_frame
 
 # The following is also part of main.py.
-uris = gather_track_uris(start_year = 2013, end_year = 2022, n_tracks = 300)
-features = get_song_features_from_uri(uris)
-metadata = get_metadata_info(uris)
-data = construct_pandas_dataframe(uris, features, metadata)
-data.to_csv("song_data.csv", index = False)
-data_read = pd.read_csv("song_data.csv")
+# uris = gather_track_uris(start_year = 2013, end_year = 2022, n_tracks = 300)
+# features = get_song_features_from_uri(uris)
+# metadata = get_metadata_info(uris)
+# data = construct_pandas_dataframe(uris, features, metadata)
+# data.to_csv("song_data.csv", index = False)
+# data_read = pd.read_csv("song_data.csv")
