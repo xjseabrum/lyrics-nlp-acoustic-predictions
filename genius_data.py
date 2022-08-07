@@ -57,5 +57,12 @@ for batch in range(len(genius_lyrics), n_batches):
         np.vectorize(find_lyrics)(
             data["comb"][(batch*batch_size):((batch+1)*batch_size)]))
 
+# Flatten the list
+genius_flattened = list(np.concatenate(genius_lyrics).flat)
+data["lyrics"] = genius_flattened
+data.to_csv("data_genius_data.csv", index=False)
+
+# Data will need to be validated and cleaned
+
 # np.vectorize(find_lyrics)(data["comb"][():()])    
   
