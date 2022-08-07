@@ -22,12 +22,15 @@ from utils import stutter_removal, remove_genius_embed
 genius = Genius(remove_section_headers=True)
 
 def find_lyrics(song_and_artist:list, delimiter = " ::: ") -> str:
-    # Then get the song with the most similar track title name
     title = song_and_artist.split(delimiter)[0]
     artist = song_and_artist.split(delimiter)[1]
     # Don't need the full info of the song.
     lyrics = genius.search_song(title = title, artist = artist,
                                 get_full_info=False)
+    # Not all songs have lyrics on genius.
+    # If no lyrics, return empty string.
+    if lyrics is None:
+        return ""
     # Take out the first line break that 
     # contains the song name and artist
     out = lyrics.lyrics.split("\n")[1:]
@@ -38,5 +41,21 @@ def find_lyrics(song_and_artist:list, delimiter = " ::: ") -> str:
     out = remove_genius_embed(out)
     return out
 
-# np.vectorize(find_lyrics)(data["comb"])    
+
+# Internet connection drops randomly.
+# Creating a workaround to batch the songs in groups of 20.
+# This requires manual restart as the timeouts can happen at 
+# any point.
+
+genius_lyrics = []
+batch_size = 20
+n_batches = len(data) // batch_size
+
+for batch in range(len(genius_lyrics), n_batches):
+    print(f"Processing batch index: {batch} of {n_batches-1}")
+    genius_lyrics.append(
+        np.vectorize(find_lyrics)(
+            data["comb"][(batch*batch_size):((batch+1)*batch_size)]))
+
+# np.vectorize(find_lyrics)(data["comb"][():()])    
   
