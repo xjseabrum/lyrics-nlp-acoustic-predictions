@@ -2,9 +2,10 @@
 from os.path import exists
 import pandas as pd
 import numpy as np
-from data_collection.spotify import gather_track_uris, get_song_features_from_uri, get_metadata_info, construct_pandas_dataframe
+from data_collection.spotify import *
 from data_collection.genius import find_lyrics
 from utils import *
+from data_validation.utils import *
 
 def create_or_load_data(filepath = "data/00_song_data.csv") -> pd.DataFrame:
     if not exists(filepath):
