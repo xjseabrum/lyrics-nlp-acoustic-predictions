@@ -131,5 +131,10 @@ double_check = data_with_lyrics[data_with_lyrics["wpm"] > wpm_upper_whisker]
 data_with_lyrics = data_with_lyrics[
                        ~data_with_lyrics.index.isin(double_check.index)]
 
+# Number of songs removed due to:
+# No lyrics found by Genius: 45
+# High wpm: 124
+# Low wpm: 20
+
 # Save this dataframe for further cleaning later.
 data_with_lyrics.to_csv("data_clean.csv")
