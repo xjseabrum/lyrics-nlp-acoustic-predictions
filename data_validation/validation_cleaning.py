@@ -1,27 +1,11 @@
 # Validating that the lyrics are correct
 # and cleaning/finding other sources for instances where they are dubious
 
-import numpy as np
-import re
 import pandas as pd
 import matplotlib.pyplot as plt
-
+from utils import remove_empty_lyrics, remove_outliers_using_boxplot
 
 data = pd.read_csv("data_genius_data.csv")
-
-# If Genius didn't find lyrics/rejected the search, it returns a None type
-# Setting the length of those lyrics to be 0. Otherwise, count the number
-# of words either delimited by spaces or by new line characters.
-def count_words(lyrics:str) -> int:
-    if type(lyrics) != str:
-        return 0
-    if len(lyrics) == 0:
-        return 0
-    return len(re.split("\n| ", lyrics))
-
-
-# n_words calculation
-data["n_words"] = np.vectorize(count_words)(data["lyrics"])
 
 # Calculate a words per minute (wpm)
 data["duration_min"] = data["duration_ms"] / 60000
@@ -36,7 +20,7 @@ plt.show()
 data["wpm"] = data["n_words"]/(data["duration_min"])
 
 # Subset to just the songs that do have lyrics
-data_with_lyrics = data[data["n_words"] > 0]
+data_with_lyrics = remove_empty_lyrics(dataset = data)
 
 # Large wpm are could be indicative of incorrect lyrics being found
 # using Genius' API. Based on cursory glance, usually the incorrect lyrics

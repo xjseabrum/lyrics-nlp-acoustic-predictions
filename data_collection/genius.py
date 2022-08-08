@@ -16,7 +16,6 @@
 # These can be found in your api client in Genius:
 # https://genius.com/api-clients
 
-import numpy as np
 from lyricsgenius import Genius
 from utils import stutter_removal, remove_genius_embed
 genius = Genius(remove_section_headers=True)
@@ -41,24 +40,30 @@ def find_lyrics(song_and_artist:list, delimiter = " ::: ") -> str:
     out = remove_genius_embed(out)
     return out
 
+# The following commented out code is for if the
+# internet connection drops randomly.
+# This workaround batches the songs in groups of 20.
+# However, this requires manual restart as the timeouts can happen at 
+# any point.  This temporary solution is not scalable.
 
-# Internet connection drops randomly.
-# Creating a workaround to batch the songs in groups of 20.
-# This requires manual restart as the timeouts can happen at 
-# any point.
+# genius_lyrics = []
+# batch_size = 20
+# n_batches = len(data) // batch_size
 
-genius_lyrics = []
-batch_size = 20
-n_batches = len(data) // batch_size
+# for batch in range(len(genius_lyrics), n_batches):
+#     print(f"Processing batch index: {batch} of {n_batches-1}")
+#     genius_lyrics.append(
+#         np.vectorize(find_lyrics)(
+#             data["comb"][(batch*batch_size):((batch+1)*batch_size)]))
 
-for batch in range(len(genius_lyrics), n_batches):
-    print(f"Processing batch index: {batch} of {n_batches-1}")
-    genius_lyrics.append(
-        np.vectorize(find_lyrics)(
-            data["comb"][(batch*batch_size):((batch+1)*batch_size)]))
+# # Flatten the list
+# genius_flattened = list(np.concatenate(genius_lyrics).flat)
+# data["lyrics"] = genius_flattened
+# data["n_words"] = np.vectorize(count_words)(data["lyrics"])
+# data.to_csv("data/01_genius_data.csv")
 
-# Flatten the list
-genius_flattened = list(np.concatenate(genius_lyrics).flat)
-data["lyrics"] = genius_flattened
-data.to_csv("data_genius_data.csv", index=False)
+
+
+
+
   
