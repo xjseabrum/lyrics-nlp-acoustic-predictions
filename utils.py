@@ -23,5 +23,5 @@ def remove_genius_embed(lyrics:str) -> str:
     Remove the NUMBERembed that appears at the end of lyrics from Genius.
     Ex: "...yeah176Embed" -> "...yeah"
     """
-    out = re.sub(r"[0-9]+Embed", "", lyrics)
+    out = re.sub(r"([0-9]+)?Embed", "", lyrics)
     return out
