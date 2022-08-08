@@ -1,5 +1,4 @@
-# Ignore this file for now.
-# Eventually this will be the main entry point for the program.
+# This is the main entry point for the program.
 
 from setup import create_or_load_data, add_genius_data, clean_data
 

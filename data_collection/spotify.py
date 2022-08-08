@@ -149,4 +149,5 @@ def construct_pandas_dataframe(track_uris:list,
         data_list.append(combined_dict)
     
     data_frame = pd.DataFrame.from_dict(data_list)
+    data_frame["comb"] = data_frame["song_name"] + " ::: " + data_frame["main_artist"]
     return data_frame

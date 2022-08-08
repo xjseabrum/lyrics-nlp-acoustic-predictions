@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 # If Genius didn't find lyrics/rejected the search, it returns a None type
 # Setting the length of those lyrics to be 0. Otherwise, count the number
 # of words either delimited by spaces or by new line characters.
+
 def count_words(lyrics:str) -> int:
     if type(lyrics) != str:
         return 0
