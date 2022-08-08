@@ -17,7 +17,7 @@
 # https://genius.com/api-clients
 
 from lyricsgenius import Genius
-from utils import stutter_removal, remove_genius_embed
+from data_validation.utils import stutter_removal, remove_genius_embed
 genius = Genius(remove_section_headers=True)
 
 def find_lyrics(song_and_artist:list, delimiter = " ::: ") -> str:
