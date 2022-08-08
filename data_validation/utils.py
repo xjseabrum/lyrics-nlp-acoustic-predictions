@@ -65,7 +65,7 @@ def remove_outliers_using_boxplot(dataset:pd.DataFrame,
                                  data_column:str = "wpm",
                                  first_pass_whisker:float = 1.5,
                                  second_pass_whisker:float = 1.0, 
-                                 two_passes = False, 
+                                 two_passes = True, 
                                  save_plot = False, 
                                  plot_name = "data") -> pd.DataFrame:
     """
