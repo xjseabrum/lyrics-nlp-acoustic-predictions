@@ -16,12 +16,23 @@ def stutter_removal(lyrics:str) -> str:
     out = re.sub(r"\S?([A-Za-z]\-)+", "", lyrics)
     return out
 
+def title_and_artist_in_lyrics(title_artist:str, lyrics:str) -> bool:
+    
+    """
+    Check if the title and artist are in the lyrics. If they are, 
+    very likely that the ``lyrics`` are some type of list of artists and songs.
+    """
+    title_artist = re.sub(" ::: ", " - ", title_artist)
+    if title_artist in lyrics:
+        return 1
+    return 0
+
 def remove_genius_embed(lyrics:str) -> str:
     """
     Remove the NUMBERembed that appears at the end of lyrics from Genius.
     Ex: "...yeah176Embed" -> "...yeah"
     """
-    out = re.sub(r"([0-9]+)?Embed", "", lyrics)
+    out = re.sub(r"([0-9]+(.|,)?([0-9]+)?(K|M|B)?)?Embed", "", lyrics)
     return out
 
 def word_count_validation(dataset:pd.DataFrame, column = "lyrics"):
