@@ -14,6 +14,7 @@ def execute_cleaning(dataset:pd.DataFrame) -> pd.DataFrame:
                                            two_passes = True, save_plot = True)
    dataset = only_keep_target_language_lyrics(dataset = dataset)
    dataset = remove_duplicate_songs(dataset = dataset)
+   dataset = remove_duplicate_songs(dataset = dataset, columns = ["lyrics"])
    return dataset
 
 # Calculate a words per minute (wpm)

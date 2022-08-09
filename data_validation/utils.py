@@ -64,7 +64,6 @@ def remove_duplicate_songs(dataset:pd.DataFrame,
                            columns:list = ["track_id"]) -> pd.DataFrame:
     dataset = dataset.drop_duplicates(subset = columns)
     return dataset
-    pass
 
 # Function to remove outliers. 
 def remove_outliers_using_boxplot(dataset:pd.DataFrame, 
