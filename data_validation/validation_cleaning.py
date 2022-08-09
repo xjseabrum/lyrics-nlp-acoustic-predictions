@@ -13,6 +13,7 @@ def execute_cleaning(dataset:pd.DataFrame) -> pd.DataFrame:
    dataset = remove_outliers_using_boxplot(dataset = dataset, 
                                            two_passes = True, save_plot = True)
    dataset = only_keep_target_language_lyrics(dataset = dataset)
+   dataset = remove_duplicate_songs(dataset = dataset)
    return dataset
 
 # Calculate a words per minute (wpm)
