@@ -9,8 +9,7 @@
 # limiter = AsyncLimiter(1, 0.125)
 
 import re
-import pandas as pd
-import matplotlib.pyplot as plt
+import numpy as np
 
 # If Genius didn't find lyrics/rejected the search, it returns a None type
 # Setting the length of those lyrics to be 0. Otherwise, count the number
@@ -22,4 +21,14 @@ def count_words(lyrics:str) -> int:
     if len(lyrics) == 0:
         return 0
     return len(re.split("\n| ", lyrics))
+
+def fd_bins(data_column):
+    # Using the Freedman-Diaconis rule to determine the number of bins
+    # https://en.wikipedia.org/wiki/Freedman%E2%80%93Diaconis_rule
+    iqr = np.subtract(*np.percentile(data_column, [75, 25]))
+    n_obs = len(data_column)
+    h = (2 * iqr * (n_obs**(-1/3)))
+    max_ = max(data_column)
+    min_ = min(data_column)
+    return int(((max_ - min_)/h) // 1)
 

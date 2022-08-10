@@ -2,11 +2,10 @@
 from os.path import exists
 import pandas as pd
 import numpy as np
-from sympy import true
 from data_collection.spotify import *
 from data_collection.genius import find_lyrics
+from data_validation.utils import half_rnb
 from data_validation.validation_cleaning import execute_cleaning
-from utils import count_words
 
 def create_or_load_data(filepath = "data/00_song_data.csv") -> pd.DataFrame:
     if not exists(filepath):
@@ -47,5 +46,21 @@ def clean_data(dataset:pd.DataFrame,
     else:
         print(f"File {clean_filepath} found. Loading...")
         data = pd.read_csv(f"{clean_filepath}")
+    data = data.reset_index(drop = True)
     return data
     
+def assert_rnb(dataset:pd.DataFrame, 
+               clean_filepath = "data/03_rnb_songs.csv") -> pd.DataFrame:
+    data = dataset
+    if not exists(clean_filepath):
+        print(f"File {clean_filepath} not found. Creating...")
+        data["rnb"] = data["main_artist_genres"].apply(half_rnb)
+        rnb = data[data["rnb"]]
+        rnb = rnb.drop(columns = ["rnb"])
+        rnb.to_csv(f"{clean_filepath}", index = False)
+        print(f"File {clean_filepath} has been created.")
+    else:
+        print(f"File {clean_filepath} found. Loading...")
+        rnb = pd.read_csv(f"{clean_filepath}")
+    rnb = rnb.reset_index(drop = True)
+    return rnb

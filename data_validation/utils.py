@@ -1,12 +1,10 @@
+import ast
 import re
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import fasttext
 from utils import count_words
-# import spacy
-# from spacy.language import Language
-# from spacy_langdetect import LanguageDetector
 
 def stutter_removal(lyrics:str) -> str:
     """
@@ -16,16 +14,28 @@ def stutter_removal(lyrics:str) -> str:
     out = re.sub(r"\S?([A-Za-z]\-)+", "", lyrics)
     return out
 
-def title_and_artist_in_lyrics(title_artist:str, lyrics:str) -> bool:
+def title_and_artist_in_lyrics(dataset:pd.DataFrame, 
+                               title_artist:str = "comb", 
+                               lyrics:str = "lyrics") -> pd.DataFrame:
     
     """
     Check if the title and artist are in the lyrics. If they are, 
     very likely that the ``lyrics`` are some type of list of artists and songs.
     """
-    title_artist = re.sub(" ::: ", " - ", title_artist)
-    if title_artist in lyrics:
-        return 1
-    return 0
+    dataset.reset_index(drop = True, inplace = True)
+    title_artist_list = [re.sub(" ::: ", " - ", x) for x in dataset[title_artist]]
+    drop_observation = []
+    for item in range(len(title_artist_list)):
+        if (title_artist_list[item]) in dataset[lyrics].get(item):
+            drop_observation.append(1)
+        elif "feat." in dataset[lyrics].get(item):
+            drop_observation.append(1)
+        else:
+            drop_observation.append(0)
+    dataset["drop"] = drop_observation
+    dataset = dataset[dataset["drop"] == 0]
+    dataset = dataset.drop(columns = ["drop"])
+    return dataset
 
 def remove_genius_embed(lyrics:str) -> str:
     """
@@ -68,7 +78,8 @@ def remove_empty_lyrics(dataset:pd.DataFrame,
     """
     Remove rows with empty lyrics.
     """
-    dataset = dataset[dataset[n_words_column] > 0]
+    dataset = dataset[(dataset[n_words_column] > 0) & 
+                      (dataset[n_words_column] != np.nan)]
     return dataset
 
 def remove_duplicate_songs(dataset:pd.DataFrame, 
@@ -148,4 +159,17 @@ def only_keep_target_language_lyrics(dataset:pd.DataFrame,
         lang_predictions.append(fasttext_model.predict(text)[0][0][-2:])
     dataset["lyrics_lang"] = lang_predictions
     target_language_only = dataset[dataset["lyrics_lang"].isin(target_language)]
-    return target_language_only
+    target = target_language_only.drop(columns = ["lyrics_lang"])
+    return target
+
+# Filter the dataset to artists whose genres are at least comprised 
+# of half rnb or its variants.
+def half_rnb(s):
+    # If half of the artist's genres are R&B, return true
+    s_list = ast.literal_eval(s)
+    n_genre = len(s_list)
+    n_rnb = 0
+    for item in s_list:
+        if "r&b" in item.lower():
+            n_rnb += 1
+    return n_rnb >= 0.5*n_genre
