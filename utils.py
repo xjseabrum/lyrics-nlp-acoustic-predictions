@@ -10,6 +10,7 @@
 
 import re
 import numpy as np
+from scipy.stats import skew, kurtosis
 
 # If Genius didn't find lyrics/rejected the search, it returns a None type
 # Setting the length of those lyrics to be 0. Otherwise, count the number
@@ -32,3 +33,8 @@ def fd_bins(data_column):
     min_ = min(data_column)
     return int(((max_ - min_)/h) // 1)
 
+def get_skew(data_points):
+    return skew(data_points, bias = False)
+
+def get_fisher_kurtosis(data_points):
+    return kurtosis(data_points, bias = False, fisher = True)

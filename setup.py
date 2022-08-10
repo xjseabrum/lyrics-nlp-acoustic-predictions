@@ -49,7 +49,7 @@ def clean_data(dataset:pd.DataFrame,
     data = data.reset_index(drop = True)
     return data
     
-def assert_rnb(dataset:pd.DataFrame, 
+def subset_to_rnb(dataset:pd.DataFrame, 
                clean_filepath = "data/03_rnb_songs.csv") -> pd.DataFrame:
     data = dataset
     if not exists(clean_filepath):
