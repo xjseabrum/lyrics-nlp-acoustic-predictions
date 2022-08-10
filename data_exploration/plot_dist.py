@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import math as m
 import numpy as np
 from utils import fd_bins, get_skew, get_fisher_kurtosis
 
