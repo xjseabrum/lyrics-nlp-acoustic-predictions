@@ -23,9 +23,3 @@ def get_histogram(dataset, column,
         plt.savefig(filename)
     plt.show()
     plt.close()
-
-def epsilon_log(column, epsilon = 1e-6):
-    # Adds small value epsilon before evaluating the log
-    # so as to prevent -Inf in evaluation
-    value = column + epsilon
-    return m.log(value)
