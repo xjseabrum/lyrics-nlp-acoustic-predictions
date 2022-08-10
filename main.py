@@ -11,12 +11,6 @@ def main():
 if __name__ == "__main__":
     data = main()
 
-    # The following is to generate the histograms
-    # fd_bins reports over 6k bins for instrumentalness, so that was manually
-    # set to 40. Otherwise fd_bins worked fine.
-
-    # x = data.acousticness; plt.hist(x, bins = fd_bins(x)); plt.title(f"Distribution of `{x.name}`"); plt.xlabel(f"Value, continuous [{np.round(min(x), 1)}, {np.round(max(x), 1)}]    Skew: {np.round(get_skew(x), 3)}, Fisher Kurtosis: {np.round(get_fisher_kurtosis(x), 3)}"); plt.ylabel("Num. occurences"); plt.savefig(f"figures_charts/dist_{x.name}.png")
-
     # For discrete ticks (for the Year variable):
     # https://stackoverflow.com/questions/30112420/histogram-for-discrete-values-with-matplotlib
     # data[["Year", "Month", "Day"]] = data.release_date.str.split("-", expand = True)
