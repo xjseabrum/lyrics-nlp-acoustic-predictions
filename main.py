@@ -15,7 +15,7 @@ if __name__ == "__main__":
     # fd_bins reports over 6k bins for instrumentalness, so that was manually
     # set to 40. Otherwise fd_bins worked fine.
 
-x = data.acousticness; plt.hist(x, bins = fd_bins(x)); plt.title(f"Distribution of `{x.name}`"); plt.xlabel(f"Value, continuous [{np.round(min(x), 1)}, {np.round(max(x), 1)}]    Skew: {np.round(get_skew(x), 3)}, Fisher Kurtosis: {np.round(get_fisher_kurtosis(x), 3)}"); plt.ylabel("Num. occurences"); plt.savefig(f"figures_charts/dist_{x.name}.png")
+    # x = data.acousticness; plt.hist(x, bins = fd_bins(x)); plt.title(f"Distribution of `{x.name}`"); plt.xlabel(f"Value, continuous [{np.round(min(x), 1)}, {np.round(max(x), 1)}]    Skew: {np.round(get_skew(x), 3)}, Fisher Kurtosis: {np.round(get_fisher_kurtosis(x), 3)}"); plt.ylabel("Num. occurences"); plt.savefig(f"figures_charts/dist_{x.name}.png")
 
     # For discrete ticks (for the Year variable):
     # https://stackoverflow.com/questions/30112420/histogram-for-discrete-values-with-matplotlib
@@ -25,4 +25,4 @@ x = data.acousticness; plt.hist(x, bins = fd_bins(x)); plt.title(f"Distribution 
     # left_of_first_bin = data.Year.min() - float(d)/2
     # right_of_last_bin = data.Year.max() + float(d)/2
 
-    # x = data.Year; plt.hist(x, bins = np.arange(left_of_first_bin, right_of_last_bin + d, d)); plt.title(f"Distribution of `{x.name}`"); plt.xlabel(f"Value, discrete [{np.round(min(x), 1)}, {np.round(max(x), 1)}]"); plt.ylabel("Num. occurences"); plt.xticks([2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022]); plt.savefig(f"figures_charts/dist_{x.name}.png")
+    # x = data.Year; plt.hist(x, bins = np.arange(left_of_first_bin, right_of_last_bin + d, d)); plt.title(f"Distribution of `{x.name}`"); plt.xlabel(f"Value, discrete [{np.round(min(x), 1)}, {np.round(max(x), 1)}]    Skew: {np.round(get_skew(x), 3)}, Fisher Kurtosis: {np.round(get_fisher_kurtosis(x), 3)}"); plt.ylabel("Num. occurences"); plt.xticks([2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022]); plt.savefig(f"figures_charts/dist_{x.name}.png")
