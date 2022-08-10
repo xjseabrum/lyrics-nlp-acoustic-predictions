@@ -1,4 +1,4 @@
-# Setup for running the program in main.
+# Setup file for running the program in main.
 from os.path import exists
 import pandas as pd
 import numpy as np
