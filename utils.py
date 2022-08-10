@@ -38,3 +38,10 @@ def get_skew(data_points):
 
 def get_fisher_kurtosis(data_points):
     return kurtosis(data_points, bias = False, fisher = True)
+
+def epsilon_log(column, epsilon = 1e-6):
+    # Adds small value epsilon before evaluating the log
+    # so as to prevent -Inf in evaluation.  Set value to 
+    # 1e-6 or lower.
+    value = column + epsilon
+    return m.log(value)
