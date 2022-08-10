@@ -4,6 +4,7 @@
 #   - test: 15% of the data
 
 from sklearn.model_selection import train_test_split
+from utils import save_split_if_not_exists
 import pandas as pd
 
 data = pd.read_csv("data/04_rnb_selected_features.csv")
@@ -25,10 +26,9 @@ x_train, x_valid, y_train, y_valid = train_test_split(x_train, y_train,
                                     stratify = x_train["year"],
                                     test_size = (valid_size)/(train_size + valid_size))
 
-# Save to csv
-x_train.to_csv("data/05_x_train.csv", index = False)
-x_valid.to_csv("data/05_x_valid.csv", index = False)
-x_test.to_csv("data/05_x_test.csv", index = False)
-y_train.to_csv("data/05_y_train.csv", index = False)
-y_valid.to_csv("data/05_y_valid.csv", index = False)
-y_test.to_csv("data/05_y_test.csv", index = False)
+save_split_if_not_exists(x_train, "data/05_x_train.csv")
+save_split_if_not_exists(x_valid, "data/05_x_valid.csv")
+save_split_if_not_exists(x_test, "data/05_x_test.csv")
+save_split_if_not_exists(y_train, "data/05_y_train.csv")
+save_split_if_not_exists(y_valid, "data/05_y_valid.csv")
+save_split_if_not_exists(y_test, "data/05_y_test.csv")

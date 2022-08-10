@@ -3,6 +3,7 @@
 import re
 import math as m
 import numpy as np
+from os.path import exists
 from scipy.stats import skew, kurtosis
 
 # If Genius didn't find lyrics/rejected the search, it returns a None type
@@ -37,3 +38,10 @@ def epsilon_log(column, epsilon = 1e-6):
     # 1e-6 or lower.
     value = column + epsilon
     return m.log(value)
+
+def save_split_if_not_exists(data, filepath):
+    if not exists(filepath):
+        data.to_csv(filepath, index = False)
+        print(f"File {filepath} has been created.")
+    else:
+        print(f"File {filepath} already exists! Delete before trying again.")
