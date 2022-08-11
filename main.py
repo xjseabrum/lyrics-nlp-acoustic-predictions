@@ -1,5 +1,5 @@
 # This is the main entry point for the program.
-from create import *
+from startup import *
 
 def main():
     data = create_or_load_data()
