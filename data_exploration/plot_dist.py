@@ -8,7 +8,7 @@ def get_histogram(dataset, column,
                   folder = "figures_charts/"):
     filename = f"{folder}dist_{column}.png"
     var_of_interest = dataset[column]
-    n_bins = min(fd_bins(var_of_interest), 50)
+    n_bins = fd_bins(var_of_interest)
     plt.hist(var_of_interest, bins = n_bins)
     plt.title(f"Distribution of `{column}`")
 

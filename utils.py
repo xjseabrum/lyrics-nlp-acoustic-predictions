@@ -19,12 +19,15 @@ def count_words(lyrics:str) -> int:
 def fd_bins(data_column):
     # Using the Freedman-Diaconis rule to determine the number of bins
     # https://en.wikipedia.org/wiki/Freedman%E2%80%93Diaconis_rule
+
     iqr = np.subtract(*np.percentile(data_column, [75, 25]))
     n_obs = len(data_column)
     h = (2 * iqr * (n_obs**(-1/3)))
     max_ = max(data_column)
     min_ = min(data_column)
-    return int(((max_ - min_)/h) // 1)
+    # 50 bars is already hard enough to see on a histogram, 
+    # so return the minimum between 50 and the number of bins
+    return min(50, int(((max_ - min_)/h) // 1))
 
 def get_skew(data_points):
     return skew(data_points, bias = False)
@@ -45,3 +48,34 @@ def save_split_if_not_exists(data, filepath):
         print(f"File {filepath} has been created.")
     else:
         print(f"File {filepath} already exists! Delete before trying again.")
+
+def get_mae(y_true, y_pred, average_across_responses = False, precision = 4):
+    # Get mae for the 7 response values together
+    # Note: sklearn's mae returns a warning to screen 
+    # due to a deprication issue on their end.  
+    # However, the results calculations below match sklearn's 
+    # all without producing the warning.
+    if average_across_responses:
+        # Take the flat average of the mae across the 7 response values
+        out = np.mean(np.abs(y_true - y_pred), axis = 1).mean()
+        return np.round(out, precision)
+    out = np.array(np.mean(np.abs(y_true - y_pred), axis = 0)).reshape(1, -1)
+    return np.round(out, precision)
+
+def get_mse(y_true, y_pred, average_across_responses = False):
+    # Get mae for the 7 response values together
+    # Note: sklearn's mae returns a warning to screen 
+    # due to a deprication issue on their end.  
+    # However, the results calculations below match sklearn's 
+    # all without producing the warning.
+    if average_across_responses:
+        # Take the flat average of the mae across the 7 response values
+        return np.mean(np.square(y_true - y_pred), axis = 1).mean()
+    return np.array(np.mean(np.square(y_true - y_pred), axis = 0)).reshape(1, -1)
+
+def get_rmse(y_true, y_pred, average_across_responses = False, precision = 4):
+    if average_across_responses:
+        out = np.sqrt(get_mse(y_true, y_pred, average_across_responses))
+        return np.round(out, precision)
+    out = np.sqrt(get_mse(y_true, y_pred, average_across_responses))
+    return np.round(out, precision)
