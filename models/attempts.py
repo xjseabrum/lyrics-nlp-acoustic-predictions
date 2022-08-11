@@ -43,8 +43,28 @@ def baseline_guess_one_half(Y, average_across_responses = False):
     rmse = get_rmse(Y_true, Y_pred, average_across_responses)
     return mae, mse, rmse
 
+def baseline_guess_mean(Y, average_across_responses = False):
+    Y_true = np.array(Y.copy())
+    
+    # There are 7 response values
+    # Blindly guess the mean of each.
+    # Technically, this is ``cheating`` as you won't know the mean of the 
+    # validation and test sets beforehand.
+    Y_pred = np.matrix(
+            [np.mean(Y_true, axis=0)] * len(Y_true)
+            ).reshape(len(Y_true), 7)
+
+    mae = get_mae(Y_true, Y_pred, average_across_responses)
+    mse = get_mse(Y_true, Y_pred, average_across_responses) 
+    rmse = get_rmse(Y_true, Y_pred, average_across_responses)
+    return mae, mse, rmse
+
+
 baseline_mae, _, baseline_rmse = baseline_guess_one_half(Y)
 avg_baseline_mae, _, avg_baseline_rmse = baseline_guess_one_half(Y, True)
+
+mean_guess_baseline_mae, _, mean_guess_baseline_rmse = baseline_guess_mean(Y)
+avg_mean_guess_baseline_mae, _, avg_mean_guess_baseline_rmse = baseline_guess_mean(Y, True) 
 
 # Just throw the predictors in blindly and see what happens
 dumb_reg = MultiOutputRegressor(LinearRegression()).fit(X, Y)
@@ -57,8 +77,10 @@ avg_dumb_rmse = get_rmse(Y, dumb_preds, average_across_responses = True)
 
 # Print the results
 print(f" Baseline MAE: {baseline_mae}, Avg: {avg_baseline_mae}\n" + 
+      f" Mean Guess MAE: {mean_guess_baseline_mae}, Avg: {avg_mean_guess_baseline_mae}\n" +
       f" Dumb Reg MAE: {dumb_mae}, Avg: {avg_dumb_mae}\n\n" + 
-      f" Baseline RMSE: {baseline_rmse}, Avg: {avg_baseline_rmse}\n" +  
+      f" Baseline RMSE: {baseline_rmse}, Avg: {avg_baseline_rmse}\n" + 
+      f" Mean Guess RMSE: {mean_guess_baseline_rmse}, Avg: {avg_mean_guess_baseline_rmse}\n" + 
       f" Dumb Reg RMSE: {dumb_rmse}, Avg: {avg_dumb_rmse}")
 
 
