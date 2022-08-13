@@ -1,5 +1,6 @@
 # Utility functions for the project
 
+from typing import Tuple
 import pandas as pd
 import re
 import math as m
@@ -111,7 +112,7 @@ def get_rmse(y_true, y_pred, average_across_responses = False, precision = 4):
     out = np.sqrt(get_mse(y_true, y_pred, average_across_responses))
     return np.round(out, precision)
 
-def calculate_tfidf(lyrics:list) -> (TfidfVectorizer, list, np.array):
+def calculate_tfidf(lyrics:list) -> Tuple[pd.DataFrame, list, pd.DataFrame]:
     # sklearn's vectorizer removes stopwords based on frequency of word occurence
     # across all documents if a stop word list is not specified.
     # It also will automatically lowercase all words.
