@@ -4,8 +4,11 @@
 import pandas as pd
 import numpy as np
 import math as m
+
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
 # import matplotlib.pyplot as plt
-from utils import get_mae, get_mse, get_rmse
+from utils import get_mae, get_mse, get_rmse, strip_punctuation, calculate_tfidf
 from sklearn.multioutput import MultiOutputRegressor
 from sklearn.linear_model import LinearRegression
 from statsmodels.multivariate.manova import MANOVA
@@ -22,7 +25,7 @@ X = pd.read_csv('data/05_x_train.csv')
 # Convert the year column to int, adjust so that 2013 is year 0.
 X['year'] = X['year'].astype(int) - 2013
 # Keep only the X columns that are not of type str
-X = X.select_dtypes(exclude=['object'])
+# X = X.select_dtypes(exclude=['object'])
 Y = pd.read_csv("data/05_y_train.csv")
 data = pd.concat([Y, X], axis=1)
 
@@ -84,6 +87,30 @@ print(f" Baseline MAE: {baseline_mae}, Avg: {avg_baseline_mae}\n" +
       f" Dumb Reg RMSE: {dumb_rmse}, Avg: {avg_dumb_rmse}")
 
 
+def with_tfidf_vectors(X, Y, scaling = True):
+    lyrics = strip_punctuation(X["lyrics"])
+    _, tfidf_vectors, _ = calculate_tfidf(lyrics)
+    tfidf_vectors = pd.DataFrame(tfidf_vectors)
+    # Ragged array shape.  Keep first 100 columns, fill NaNs with 0.
+    tfidf_vectors = tfidf_vectors.iloc[:, :100].fillna(0)
+    # Name the columns
+    tfidf_vectors.columns = [f"tfidf_{i}" for i in range(100)]
 
+    # Add back in the other data columns
+    X = pd.concat([X.select_dtypes(exclude=['object']), tfidf_vectors], axis=1)
+    # Model
+    # Each estimator is stored under the MOR's estimators attribute. ie:
+    # model.estimators_[idx].named_steps["linearregression"].coef_
+    # to access that linear regression model's coefficients.
+    model = MultiOutputRegressor(
+              make_pipeline(StandardScaler(with_mean=scaling, 
+                              with_std=scaling), 
+                LinearRegression())).fit(X, Y)
+    preds = model.predict(X)
 
+    mae = get_mae(Y, preds)
+    rmse = get_rmse(Y, preds)
+    avg_mae = get_mae(Y, preds, average_across_responses = True)
+    avg_rmse = get_rmse(Y, preds, average_across_responses = True)
+    return model, preds, mae, rmse, avg_mae, avg_rmse 
 
