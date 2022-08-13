@@ -1,10 +1,12 @@
 # Utility functions for the project
 
+import pandas as pd
 import re
 import math as m
 import numpy as np
 from os.path import exists
 from scipy.stats import skew, kurtosis
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 # If Genius didn't find lyrics/rejected the search, it returns a None type
 # Setting the length of those lyrics to be 0. Otherwise, count the number
@@ -15,6 +17,35 @@ def count_words(lyrics:str) -> int:
     if len(lyrics) == 0:
         return 0
     return len(re.split("\n| ", lyrics))
+
+def strip_punctuation(lyrics:list):
+    # Adjust for non-standard punctuation
+    # Left double quote to regular double quote:
+    lyrics = [x.replace("&#8220;", "\"") for x in lyrics]
+    lyrics = [x.replace("“", "\"") for x in lyrics]
+    # Right double quote to regular double quote:
+    lyrics = [x.replace("&#8221;", "\"") for x in lyrics]
+    lyrics = [x.replace("”", "\"") for x in lyrics]
+    # Left single quote to regular single quote:
+    lyrics = [x.replace("&#8216;", "\'") for x in lyrics]
+    lyrics = [x.replace("‘", "\'") for x in lyrics]
+    # Right single quote to regular single quote:
+    lyrics = [x.replace("&#8217;", "\'") for x in lyrics]
+    lyrics = [x.replace("â€¦", "\'") for x in lyrics]
+    lyrics = [x.replace("â€™", "\'") for x in lyrics]
+    lyrics = [x.replace("’", "\'") for x in lyrics]
+    # Replace other unicode characters with regular space
+    lyrics = [x.replace("\u2005", " ") for x in lyrics]
+    lyrics = [x.replace("\uffef", " ") for x in lyrics]
+    lyrics = [x.replace("\u205f", " ") for x in lyrics]
+    lyrics = [x.replace("\n", " ") for x in lyrics]
+    punc_strip = "\?!\"#%&(),./:;<=>@[\\]^_`{|}~"
+    for lyric in range(len(lyrics)):
+        specific_lyrics = lyrics[lyric]
+        specific_lyrics = specific_lyrics.translate(str.maketrans("", "", punc_strip))
+        specific_lyrics = re.sub("  ", " ", specific_lyrics)
+        lyrics[lyric] = specific_lyrics
+    return lyrics
 
 def fd_bins(data_column):
     # Using the Freedman-Diaconis rule to determine the number of bins
@@ -79,3 +110,31 @@ def get_rmse(y_true, y_pred, average_across_responses = False, precision = 4):
         return np.round(out, precision)
     out = np.sqrt(get_mse(y_true, y_pred, average_across_responses))
     return np.round(out, precision)
+
+def calculate_tfidf(lyrics:list) -> (TfidfVectorizer, list, np.array):
+    # sklearn's vectorizer removes stopwords based on frequency of word occurence
+    # across all documents if a stop word list is not specified.
+    # It also will automatically lowercase all words.
+
+    # First, strip the lyrics of punctuation and newlines. Strip punctuation
+    # function is user defined above.
+    lyrics = strip_punctuation(lyrics)
+
+    vectorizer = TfidfVectorizer()
+
+    # Initialize and fit->transform the lyrics
+    tfidf = vectorizer.fit_transform(lyrics)
+
+    # The following is the idf calculation for all non-stop terms in the corpus
+    idf = pd.DataFrame(vectorizer.idf_, index = vectorizer.get_feature_names_out(), columns = ["idf_value"])
+
+    # Get the sparse ``Tf-idf-weighted document-term matrix.``
+    sparse_matrix = pd.DataFrame(tfidf[0:(tfidf.shape[0])].toarray(), 
+                                 columns = vectorizer.get_feature_names_out())
+
+    # Also get the dense CSR representation for the documents
+    csr_format_representation = []
+    for lyric in range(len(lyrics)):
+        csr_format_representation.append(tfidf[lyric].data)
+
+    return sparse_matrix, csr_format_representation, idf
