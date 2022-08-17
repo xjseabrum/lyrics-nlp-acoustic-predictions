@@ -58,7 +58,7 @@ def remove_stop_words(data_column):
         lyrics_removed_stop_words.append(" ".join(lyric_split_no_stop))
     return lyrics_removed_stop_words
 
-def strip_punctuation(lyrics:list):
+def strip_punctuation(lyrics:list, for_transformers=False):
     # Adjust for non-standard punctuation
     # Left double quote to regular double quote:
     lyrics = [x.replace("&#8220;", "\"") for x in lyrics]
@@ -79,7 +79,10 @@ def strip_punctuation(lyrics:list):
     lyrics = [x.replace("\uffef", " ") for x in lyrics]
     lyrics = [x.replace("\u205f", " ") for x in lyrics]
     lyrics = [x.replace("\n", " ") for x in lyrics]
-    punc_strip = "?!\"#%&(),./:;<=>@[\\]^_`{|}~"
+    if for_transformers:
+        punc_strip = "\"#%/:;<=>@[\\]^_`{|}~"
+    else:
+        punc_strip = "?!\"#%&(),./:;<=>@[\\]^_`{|}~"
     for lyric in range(len(lyrics)):
         specific_lyrics = lyrics[lyric]
         specific_lyrics = specific_lyrics.translate(str.maketrans("", "", punc_strip))
