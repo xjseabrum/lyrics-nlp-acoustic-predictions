@@ -14,6 +14,9 @@ The variables are defined as follows:
 # Why Care about this Project?
 - 
 
+# Results
+- 
+
 # Directory/Links
 This GitHub is part of an almost daily series of posts that I have been making on LinkedIn.  Below you will find links to each of the posts as well as the general topic that was discussed. 
 
