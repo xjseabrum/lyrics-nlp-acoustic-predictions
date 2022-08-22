@@ -8,6 +8,7 @@ import pandas as pd
 
 # For visualizing the clusters
 import matplotlib.pyplot as plt
+from kneed import KneeLocator
 from yellowbrick.text import TSNEVisualizer
 
 # Load the embeddings from the Google Colab notebook
@@ -26,5 +27,31 @@ x_train.to_csv('data/05_x_train_st_emb.csv')
 
 # Determine the best number of clusters with R's NbClust
 # switch over to the optimal_k.R file for this
-# or if you already have Python/R interoperability you can use the following:
-# optimal_k = R.readRDS('optimal_k.RDS')
+# or if you already have the ``reticulate`` package in R 
+# or the ``rpy2`` library in Python, you can more easily 
+# interoperate between Python and R.
+
+# Optimal number of clusters according to NbClust is 3.
+# Can use an elbow/knee graph too. 
+
+inertias = []
+for k in range(2, 10):
+    kmeans = KMeans(n_clusters=k, random_state=0).fit(x_train_st_emb)
+    print(k, kmeans.inertia_)
+    inertias.append(kmeans.inertia_)
+
+# Plot
+i = np.arange(len(inertias))
+for idx in range(i):
+    knee = KneeLocator(i, self.distortions, 
+                        S = 1, curve='convex', 
+                        direction='decreasing', 
+                        interp_method='interp1d')
+    fig2 = plt.figure(figsize=(5, 5))
+    self.knee.plot_knee()
+    plt.xlabel("k")
+    plt.ylabel("Distortion")
+
+
+kmeans = KMeans(n_clusters=3, random_state=0).fit(x_train_st_emb)
+groupings = kmeans.labels_
