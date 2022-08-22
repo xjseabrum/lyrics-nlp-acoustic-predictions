@@ -27,7 +27,7 @@ This GitHub is part of an almost daily series of posts that I have been making o
 
 ### Data Cleaning/Validation
 [Day 4: Initial Validation](https://www.linkedin.com/posts/jay-seabrum_nlp-music-lyrics-activity-6962239209873031169-6jrh?utm_source=share&utm_medium=member_desktop) || 
-[Day 5: Be Critical and Patient](https://www.linkedin.com/posts/jay-seabrum_nlp-music-lyrics-activity-6962505961064333312-FN-S?utm_source=share&utm_medium=member_desktop) || 
+[Day 5: Be Critical and Patient](https://www.linkedin.com/posts/jay-seabrum_nlp-music-lyrics-activity-6962505961064333312-FN-S?utm_source=share&utm_medium=member_desktop)
 
 ### Data Exploration/Analysis
 [Day 6: Visualizations of Distributions](https://www.linkedin.com/posts/jay-seabrum_nlp-music-lyrics-activity-6962953547126620160-TRhy?utm_source=share&utm_medium=member_desktop) ||
