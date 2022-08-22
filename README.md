@@ -11,6 +11,9 @@ The variables are defined as follows:
 - Valence: 
 - Speechiness: 
 
+# Why Care about this Project?
+- 
+
 # Directory/Links
 This GitHub has been part of a (almost) daily series of posts that I have been making on LinkedIn.  Below you will find links to each of the posts as well as the general topic that was discussed. 
 
