@@ -1,4 +1,4 @@
-# Welcome
+# Project Question of Interest
 Given a fixed genre, can the following 7 values be predicted by the song's lyrics and release year?:
 - Acousticness, Danceability, Energy, Instrumentalness, Liveness, Valence, Speechiness
 
