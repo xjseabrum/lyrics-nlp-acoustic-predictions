@@ -18,8 +18,8 @@ The variables are defined as follows:
 This GitHub is part of an almost daily series of posts that I have been making on LinkedIn.  Below you will find links to each of the posts as well as the general topic that was discussed. 
 
 ### Data Gathering/Scraping
-Day 1:  ( )
-Day 2:  ( )
+Day 1:   || 
+Day 2:   || 
 
 ### Data Cleaning/Validation
 
@@ -32,7 +32,7 @@ Day 2:  ( )
 ### Vectorization of Lyrics
 
 ### Neural Networks and Transformers
-Day 16: ( )
+Day 16:   || 
 
 ### Clustering
-Day 17: ( )
+Day 17:   ||
