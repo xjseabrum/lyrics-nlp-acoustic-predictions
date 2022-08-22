@@ -18,7 +18,7 @@ The variables are defined as follows:
 - 
 
 # Directory/Links
-This GitHub is part of an almost daily series of posts that I have been making on LinkedIn.  Below you will find links to each of the posts grouped by general topic that was discussed.  The groups are largely chronological.
+This GitHub is part of an almost daily series of posts that I have been making on [my LinkedIn](https://www.linkedin.com/in/jay-seabrum).  Below you will find links to each of the posts grouped by general topic that was discussed.  The groups are largely chronological.
 
 ### Data Gathering/Scraping
 [Day 1: Kickoff](https://www.linkedin.com/posts/jay-seabrum_nlp-music-lyrics-activity-6961088320797904897-Uv9Q?utm_source=share&utm_medium=member_desktop)  || 
