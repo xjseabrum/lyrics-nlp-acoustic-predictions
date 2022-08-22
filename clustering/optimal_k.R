@@ -6,7 +6,7 @@ require(NbClust)
 library(NbClust)
 
 # Load in the data which were made originally in Python.
-data <- read.csv("Google_Colab_Notebooks/x_train_st_emb.csv", header = TRUE)
+data <- read.csv("data/05_x_train_st_emb.csv", header = TRUE)
 
 # If you don't like the <- syntax in R you can still just use an =.
 # data = read.csv("data.csv")
