@@ -49,7 +49,7 @@ This GitHub is part of an almost daily series of posts that I have been making o
 [Day 16: Forward Leap - Transformer Embeddings](https://www.linkedin.com/posts/jay-seabrum_nlp-music-lyrics-activity-6966536057853005824-9qaU?utm_source=share&utm_medium=member_desktop)
 
 ### Don't Stress Out, Life Gets in the Way, Go With the Flow
-[Day 14: Go With The Flow](https://www.linkedin.com/posts/jay-seabrum_66daysofdata-linkedinhardmode-nlp-activity-6965852836291051520-CZyd?utm_source=share&utm_medium=member_desktop)
+[Day 14: Go With The Flow](https://www.linkedin.com/posts/jay-seabrum_66daysofdata-linkedinhardmode-nlp-activity-6965852836291051520-CZyd?utm_source=share&utm_medium=member_desktop) || 
 [Day 15: Go With the Flow (II)](https://www.linkedin.com/posts/jay-seabrum_nlp-music-lyrics-activity-6966210911481065472-SaNo?utm_source=share&utm_medium=member_desktop)
 
 ### Clustering
