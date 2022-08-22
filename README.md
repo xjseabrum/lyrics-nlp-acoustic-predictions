@@ -15,9 +15,11 @@ The variables are defined as follows:
 - 
 
 # Directory/Links
-This GitHub has been part of a (almost) daily series of posts that I have been making on LinkedIn.  Below you will find links to each of the posts as well as the general topic that was discussed. 
+This GitHub is part of an almost daily series of posts that I have been making on LinkedIn.  Below you will find links to each of the posts as well as the general topic that was discussed. 
 
 ### Data Gathering/Scraping
+Day 1:  ( )
+Day 2:  ( )
 
 ### Data Cleaning/Validation
 
@@ -30,5 +32,7 @@ This GitHub has been part of a (almost) daily series of posts that I have been m
 ### Vectorization of Lyrics
 
 ### Neural Networks and Transformers
+Day 16: ( )
 
 ### Clustering
+Day 17: ( )
