@@ -63,7 +63,6 @@ def make_clusters_and_plot(k, data, return_data = False):
     kmeans = KMeans(n_clusters = k, random_state = 0).fit(X)
     groupings = kmeans.labels_
     
-    
     # TSNE will project the 768-dimensions down to 2 for visualization
     # The projection might look messy as who knows that hyperplanes/spheres are
     # actually separating the clusters.
@@ -75,12 +74,6 @@ def make_clusters_and_plot(k, data, return_data = False):
     if return_data:
         data["groupings"] = groupings
         return data
-
-
-# Distinct colors from:
-# https://mokole.com/palette.html
-# Hex values generated above with [Black OK, 90%] 
-# as the luminosity settings with 10000 maximum loops
 
 # Three clusters. Knee and NbClust suggest that so let's use it.
 data_3_clusters = make_clusters_and_plot(k = 3, data = x_train,  
