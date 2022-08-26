@@ -195,7 +195,14 @@ def create_w2v(lyrics:Iterable, vector_size = 200, min_count = 5) -> Word2Vec:
           f"with {len(w2v_model.wv)} word(s) in the vocab.")
     return w2v_model
 
-# def lyric_vectorizer():
-#     vectorizer = TextVectorization(max_tokens = 4096,
-#                                    output_sequence_length = 256)
-#     pass
+# The following is to ensure that numbers are printed with 
+# 5 decimal places. 
+def setup_legible_numbers():
+    np.set_printoptions(suppress = True, 
+    formatter = {"float_kind":"{:.5f}".format})
+
+# The following is to make scientific notation only have 5 decimal places.
+def setup_scientific_notation():
+    np.set_printoptions(suppress = True, 
+    precision = 5)
+
