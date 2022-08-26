@@ -53,4 +53,4 @@ This GitHub is part of an almost daily series of posts that I have been making o
 [Day 15: Go With the Flow (II)](https://www.linkedin.com/posts/jay-seabrum_nlp-music-lyrics-activity-6966210911481065472-SaNo?utm_source=share&utm_medium=member_desktop)
 
 ### Clustering
-Day 17:   ||
+[Day 17: K-Means Clustering](https://www.linkedin.com/posts/jay-seabrum_nlp-music-lyrics-activity-6967637028318429184-QDYh?utm_source=share&utm_medium=member_desktop)   || [Day 18: Expectation Maximization Clustering](https://www.linkedin.com/posts/jay-seabrum_nlp-music-lyrics-activity-6968756216915275776-9yTd?utm_source=share&utm_medium=member_desktop)
